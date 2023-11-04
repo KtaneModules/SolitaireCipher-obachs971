@@ -193,7 +193,8 @@ public class solitaireCipher : MonoBehaviour {
             clear.AddInteractionPunch();
             Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
             submission = "";
-            screenTexts[1].text = ">";
+            if (!toggle)
+                screenTexts[1].text = ">";
         }
     }
     void togglePage(bool flag)
@@ -257,5 +258,21 @@ public class solitaireCipher : MonoBehaviour {
         submit.OnInteract();
         yield return new WaitForSeconds(0.1f);
         yield break;
+    }
+    private IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!answer.StartsWith(submission))
+        {
+            clear.OnInteract();
+            yield return new WaitForSeconds(0.1f);
+        }
+        int start = submission.Length;
+        for (int i = start; i < 6; i++)
+        {
+            keyboard["QWERTYUIOPASDFGHJKLZXCVBNM".IndexOf(answer[i])].OnInteract();
+            yield return new WaitForSeconds(0.1f);
+        }
+        submit.OnInteract();
+        yield return new WaitForSeconds(0.1f);
     }
 }
